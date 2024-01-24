@@ -1,0 +1,367 @@
+[
+    {
+        "id": "940fee75dcec7941",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "b33fe8d83edcd6da",
+        "type": "exec",
+        "z": "940fee75dcec7941",
+        "command": "",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "CHANGE S3 URL",
+        "x": 890,
+        "y": 160,
+        "wires": [
+            [
+                "5c220404b2e7fc65"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "df02397dcae34e9f",
+        "type": "inject",
+        "z": "940fee75dcec7941",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"channel-id\":\"3061824\",\"id\":\"c1vn9j\",\"s3url\":\"s3://chess-recordings/test\"}",
+        "payloadType": "json",
+        "x": 250,
+        "y": 160,
+        "wires": [
+            [
+                "e660e9dc79c345a4"
+            ]
+        ]
+    },
+    {
+        "id": "5c220404b2e7fc65",
+        "type": "debug",
+        "z": "940fee75dcec7941",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "e660e9dc79c345a4",
+        "type": "template",
+        "z": "940fee75dcec7941",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "aws medialive update-channel --channel-id {{payload.channel-id}} --destinations Id={{payload.id}},Settings={Url={{payload.s3url}}}",
+        "output": "str",
+        "x": 400,
+        "y": 160,
+        "wires": [
+            [
+                "b062b69472841ee9"
+            ]
+        ]
+    },
+    {
+        "id": "b062b69472841ee9",
+        "type": "change",
+        "z": "940fee75dcec7941",
+        "name": "",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "&#x2F;",
+                "fromt": "str",
+                "to": "/",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 640,
+        "y": 160,
+        "wires": [
+            [
+                "b33fe8d83edcd6da"
+            ]
+        ]
+    },
+    {
+        "id": "b30a465327b065a2",
+        "type": "exec",
+        "z": "940fee75dcec7941",
+        "command": "",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 310,
+        "y": 600,
+        "wires": [
+            [
+                "ce98869b4a703d97"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "a83ade76a24e81dc",
+        "type": "inject",
+        "z": "940fee75dcec7941",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "aws medialive describe-channel --channel-id 3061824",
+        "payloadType": "str",
+        "x": 110,
+        "y": 560,
+        "wires": [
+            [
+                "b30a465327b065a2"
+            ]
+        ]
+    },
+    {
+        "id": "f4473a14a969a693",
+        "type": "file",
+        "z": "940fee75dcec7941",
+        "name": "Write to file",
+        "filename": "C:\\Users\\gerar\\.node-red\\test.json",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1030,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fa3645448628271c",
+        "type": "inject",
+        "z": "940fee75dcec7941",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"Arn\":\"arn:aws:medialive:us-east-1:907196200737:channel:3061824\",\"ChannelClass\":\"SINGLE_PIPELINE\",\"Destinations\":[{\"Id\":\"c1vn9j\",\"MediaPackageSettings\":[],\"Settings\":[{\"Url\":\"s3://chess-recordings/TATA/2024/DAY01/ISO/CAM30/\"}]}],\"EgressEndpoints\":[{\"SourceIp\":\"54.211.46.146\"}],\"EncoderSettings\":{\"AudioDescriptions\":[{\"AudioSelectorName\":\"CH 1/2\",\"AudioTypeControl\":\"FOLLOW_INPUT\",\"LanguageCodeControl\":\"FOLLOW_INPUT\",\"Name\":\"CH 1/2\"}],\"CaptionDescriptions\":[],\"OutputGroups\":[{\"Name\":\"CAM30\",\"OutputGroupSettings\":{\"ArchiveGroupSettings\":{\"Destination\":{\"DestinationRefId\":\"c1vn9j\"},\"RolloverInterval\":28800}},\"Outputs\":[{\"AudioDescriptionNames\":[\"CH 1/2\"],\"CaptionDescriptionNames\":[],\"OutputName\":\"RX-030\",\"OutputSettings\":{\"ArchiveOutputSettings\":{\"ContainerSettings\":{\"M2tsSettings\":{\"AbsentInputAudioBehavior\":\"ENCODE_SILENCE\",\"Arib\":\"DISABLED\",\"AribCaptionsPid\":\"507\",\"AribCaptionsPidControl\":\"AUTO\",\"AudioBufferModel\":\"ATSC\",\"AudioFramesPerPes\":2,\"AudioPids\":\"482-498\",\"AudioStreamType\":\"DVB\",\"BufferModel\":\"MULTIPLEX\",\"CcDescriptor\":\"DISABLED\",\"DvbSubPids\":\"460-479\",\"DvbTeletextPid\":\"499\",\"Ebif\":\"NONE\",\"EbpAudioInterval\":\"VIDEO_INTERVAL\",\"EbpPlacement\":\"VIDEO_AND_AUDIO_PIDS\",\"EsRateInPes\":\"EXCLUDE\",\"EtvPlatformPid\":\"504\",\"EtvSignalPid\":\"505\",\"Klv\":\"NONE\",\"KlvDataPids\":\"501\",\"NielsenId3Behavior\":\"NO_PASSTHROUGH\",\"PatInterval\":100,\"PcrControl\":\"PCR_EVERY_PES_PACKET\",\"PcrPeriod\":40,\"PmtInterval\":100,\"PmtPid\":\"480\",\"ProgramNum\":1,\"RateMode\":\"CBR\",\"Scte27Pids\":\"450-459\",\"Scte35Control\":\"NONE\",\"Scte35Pid\":\"500\",\"SegmentationMarkers\":\"NONE\",\"SegmentationStyle\":\"MAINTAIN_CADENCE\",\"TimedMetadataBehavior\":\"NO_PASSTHROUGH\",\"TimedMetadataPid\":\"502\",\"VideoPid\":\"481\"}},\"NameModifier\":\"$d$-TATA-CAM30-2CH\"}},\"VideoDescriptionName\":\"RX-030\"}]}],\"TimecodeConfig\":{\"Source\":\"EMBEDDED\"},\"VideoDescriptions\":[{\"CodecSettings\":{\"H264Settings\":{\"AdaptiveQuantization\":\"AUTO\",\"AfdSignaling\":\"NONE\",\"ColorMetadata\":\"INSERT\",\"EntropyEncoding\":\"CABAC\",\"FlickerAq\":\"ENABLED\",\"ForceFieldPictures\":\"DISABLED\",\"FramerateControl\":\"INITIALIZE_FROM_SOURCE\",\"GopBReference\":\"DISABLED\",\"GopClosedCadence\":1,\"GopSize\":90,\"GopSizeUnits\":\"FRAMES\",\"Level\":\"H264_LEVEL_AUTO\",\"LookAheadRateControl\":\"MEDIUM\",\"NumRefFrames\":1,\"ParControl\":\"INITIALIZE_FROM_SOURCE\",\"Profile\":\"MAIN\",\"RateControlMode\":\"CBR\",\"ScanType\":\"PROGRESSIVE\",\"SceneChangeDetect\":\"ENABLED\",\"SpatialAq\":\"ENABLED\",\"SubgopLength\":\"FIXED\",\"Syntax\":\"DEFAULT\",\"TemporalAq\":\"ENABLED\",\"TimecodeInsertion\":\"PIC_TIMING_SEI\"}},\"Height\":1080,\"Name\":\"RX-030\",\"RespondToAfd\":\"NONE\",\"ScalingBehavior\":\"DEFAULT\",\"Sharpness\":50,\"Width\":1920}]},\"Id\":\"3061824\",\"InputAttachments\":[{\"InputAttachmentName\":\"RX-030-CONNECT\",\"InputId\":\"9512850\",\"InputSettings\":{\"AudioSelectors\":[{\"Name\":\"CH 1/2\"}],\"CaptionSelectors\":[],\"DeblockFilter\":\"DISABLED\",\"DenoiseFilter\":\"DISABLED\",\"FilterStrength\":1,\"InputFilter\":\"AUTO\",\"Smpte2038DataPreference\":\"IGNORE\",\"SourceEndBehavior\":\"CONTINUE\"}}],\"InputSpecification\":{\"Codec\":\"MPEG2\",\"MaximumBitrate\":\"MAX_20_MBPS\",\"Resolution\":\"HD\"},\"LogLevel\":\"DISABLED\",\"Maintenance\":{\"MaintenanceDay\":\"FRIDAY\",\"MaintenanceStartTime\":\"05:00\"},\"Name\":\"RX-030-RECORD\",\"PipelineDetails\":[],\"PipelinesRunningCount\":0,\"RoleArn\":\"arn:aws:iam::907196200737:role/MediaLiveAccessRole\",\"State\":\"IDLE\",\"Tags\":{}}",
+        "payloadType": "json",
+        "x": 530,
+        "y": 400,
+        "wires": [
+            [
+                "679bd03d38ff94f7",
+                "10f63661844f6610"
+            ]
+        ]
+    },
+    {
+        "id": "10f63661844f6610",
+        "type": "change",
+        "z": "940fee75dcec7941",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.EncoderSettings",
+                "tot": "msg",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "payload.OutputGroups[0].Outputs[0].OutputSettings.ArchiveOutputSettings.NameModifier",
+                "pt": "msg",
+                "to": "ajsdfadsf",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.OutputGroups[0].Name",
+                "pt": "msg",
+                "to": "hello",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 360,
+        "wires": [
+            [
+                "f4473a14a969a693"
+            ]
+        ]
+    },
+    {
+        "id": "843960fadf773ec4",
+        "type": "comment",
+        "z": "940fee75dcec7941",
+        "name": "Change s3 URL",
+        "info": "",
+        "x": 280,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "56eae8e673294945",
+        "type": "comment",
+        "z": "940fee75dcec7941",
+        "name": "Get Channel JSON",
+        "info": "",
+        "x": 130,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "b9b92370759857c7",
+        "type": "comment",
+        "z": "940fee75dcec7941",
+        "name": "Filter JSON to Encoder Settings",
+        "info": "",
+        "x": 810,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "1f1fe0f37dcb4ebd",
+        "type": "template",
+        "z": "940fee75dcec7941",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "aws medialive update-channel --channel-id {{payload}} --encoder-settings file://C:\\Users\\gerar\\.node-red\\test.json",
+        "output": "str",
+        "x": 1020,
+        "y": 500,
+        "wires": [
+            [
+                "e5bc8a3f875e2266"
+            ]
+        ]
+    },
+    {
+        "id": "679bd03d38ff94f7",
+        "type": "change",
+        "z": "940fee75dcec7941",
+        "name": "CHANNEL-ID",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.Id",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 480,
+        "wires": [
+            [
+                "1f1fe0f37dcb4ebd"
+            ]
+        ]
+    },
+    {
+        "id": "e5bc8a3f875e2266",
+        "type": "exec",
+        "z": "940fee75dcec7941",
+        "command": "",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 1230,
+        "y": 500,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "ce98869b4a703d97",
+        "type": "debug",
+        "z": "940fee75dcec7941",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 600,
+        "wires": []
+    }
+]
